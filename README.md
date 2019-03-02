@@ -1,6 +1,14 @@
-# project
+# WhatTODO
 
-A new Flutter project.
+A todo application project made with Flutter.
+
+## TODO: Post images
+
+## Things TODO:
+* Create todo container.
+* Create todo cell widget.
+* Create backend application.
+* Implement server.
 
 ## Getting Started
 
