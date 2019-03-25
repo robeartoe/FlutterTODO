@@ -48,16 +48,28 @@ def postCell():
         raise
         return json.dumps({'success':False}), 408, {'ContentType':'application/json'} 
 
-#TODO: Edit item
 @app.route('/api/edit/<item>',methods=['PUT'])
 def editCell(item):
-    # TODO: Put data into a dictionary that has (item.ID & new content)
-    
-    return item
+    received_json_data=json.loads(request.data)
+    content = received_json_data['content']
+    cellID = ObjectId(item)
+    try:
+        post = collection.update_one({'_id':cellID},{'$set':{'content':content}})
+        return json.dumps({'success':True, 'post_id':item}), 201, {'ContentType':'application/json'} 
+    except:
+        return json.dumps({'success':False}), 408, {'ContentType':'application/json'} 
+        raise
 
 @app.route('/api/delete/<item>',methods=['DELETE'])
 def deleteCell(item):
-    return " "
+    try:
+        cellID = ObjectId(item)
+        collection.delete_one({'_id':cellID})
+        return json.dumps({'success':True}), 201, {'ContentType':'application/json'} 
+    except:
+        raise
+        return json.dumps({'success':False}), 408, {'ContentType':'application/json'} 
+        
 
 # MongoDB Document Structure:
 """
