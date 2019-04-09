@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:WhatTodo/API.dart';
 import 'package:WhatTodo/item.dart';
 import 'dart:convert';
+import 'todoWidget.dart';
 import 'dart:developer';
 
 void main() => runApp(MyApp());
@@ -49,8 +50,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // TODO: Add items. With the button(bottom right) to a new screen, and to post it to server.
   void postItem() {
-
+    Navigator.of(context).push(new PageRouteBuilder(
+        opaque: true,
+        transitionDuration: const Duration(milliseconds: 1000),
+        pageBuilder: (BuildContext context, _, __) {
+          return new todoWidget();
+        },
+        transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+          return new FadeTransition(
+            opacity: animation,
+            child: new RotationTransition(
+              turns: new Tween<double>(begin: 0.0, end: 0.0).animate(animation),
+              child: child,
+            ),
+          );
+        }
+    ));
   }
+
 
   Widget _buildTodolist() {
      return ListView.builder(
