@@ -18,11 +18,18 @@ class TodoState extends State<todoWidget>{
           child: Form(
               key: formKey,
               child: Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Task'
+                      labelText: 'Add Task',
+                      labelStyle: TextStyle(
+                        fontSize: 20
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 0.0)
+                    ),
+                    style: TextStyle(
+                      fontSize: 40
                     ),
                   ),
                 ],
