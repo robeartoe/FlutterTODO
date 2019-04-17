@@ -17,7 +17,7 @@ def hello_world():
 
 @app.route('/api/items',methods=['GET'])
 def getCells():
-    return dumps(collection.find())
+    return dumps(collection.find().sort('_id', -1))
 
 @app.route('/api/<item>',methods=['GET'])
 def getCell(item):
@@ -46,7 +46,8 @@ def postCell():
         return json.dumps({'success':True, 'post_id':post}), 201, {'ContentType':'application/json'} 
     except:
         raise
-        return json.dumps({'success':False}), 408, {'ContentType':'application/json'} 
+        return json.dumps({'success':False}), 408, {'ContentType':'application/json'}
+
 
 @app.route('/api/edit/<item>',methods=['PUT'])
 def editCell(item):

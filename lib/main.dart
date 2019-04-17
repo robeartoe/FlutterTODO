@@ -4,6 +4,8 @@ import 'package:WhatTodo/item.dart';
 import 'dart:convert';
 import 'todoWidget.dart';
 import 'dart:developer';
+import 'package:flutter/foundation.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'What to do'),
+      home: MyHomePage(title: 'What To Do'),
     );
   }
 }
@@ -32,11 +34,53 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var items = new List<Item>();
+  ScrollController _controller;
 
   @override
   void initState() {
     super.initState();
+    _controller = ScrollController();
+    _controller.addListener(_scrollListener);
     _getItems();
+  }
+
+  _scrollListener(){
+    if (_controller.offset <= _controller.position.minScrollExtent &&
+        !_controller.position.outOfRange) {
+          _getItems();
+          // debugPrint('_scrollListener Called!');
+    }
+  }
+
+  void _promptRemoveTodoItem(int index) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return new AlertDialog(
+        title: new Text('Mark "${items[index]}" as done?'),
+        actions: <Widget>[
+          new FlatButton(
+            child: new Text('CANCEL'),
+            onPressed: () => Navigator.of(context).pop()
+          ),
+          new FlatButton(
+            child: new Text('MARK AS DONE'),
+            onPressed: () {
+              _removeTodoItem(index);
+              Navigator.of(context).pop();
+            }
+          )
+        ]
+      );
+    }
+  );
+}
+
+  void _removeTodoItem(int index) {
+    // Remove from DB:
+    API.deleteItem(items[index]).then((response){
+        setState(() => items.removeAt(index));
+    });
   }
 
   _getItems(){
@@ -79,16 +123,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
   Widget _buildTodolist() {
-     return ListView.builder(
+      return ListView.builder(
+      controller: _controller,
       itemCount: items.length,
       itemBuilder: (context,index){
-        return ListTile(title: Text(items[index].content));
+        // debugPrint(items[index].toJson().toString());
+        return _buildTodoItem(items[index].content, index);
       },
     );
   }
 
-  Widget _buildTodoItem(){
-   
+  Widget _buildTodoItem(String content, int index){
+      return ListTile(
+        title: Text(items[index].content),
+        onTap: () => _promptRemoveTodoItem(index)
+        );
   }
 
   @override
