@@ -3,14 +3,14 @@ class Item {
   String content;
   DateTime date;
 
-  Item( String content){
+  Item (String content){
     this.id = id;
     this.content = content;
     // this.date = date;
   }
 
   Item.fromJson(Map json) :
-      id = json['_id']["\$oid"],
+      id = json['_id']['\$oid'],
       content = json['content'];
       // date = new DateTime.fromMicrosecondsSinceEpoch(json['date']['\$date']);
   

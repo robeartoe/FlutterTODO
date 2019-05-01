@@ -11,14 +11,13 @@ class TodoState extends State<todoWidget>{
   final noteController = TextEditingController();
   String note;
 
-
   //Item myItem = new Item(content);
 
   _postItem(){
     String data = noteController.text;
 
     API.postItem(data).then((response){
-      Navigator.pop(context);
+      Navigator.pop(context,{'test':"Hello"});
     });
   }
 
