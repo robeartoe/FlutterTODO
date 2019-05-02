@@ -1,4 +1,7 @@
 
+import 'dart:convert';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'item.dart';
 import 'package:WhatTodo/API.dart';
@@ -17,7 +20,18 @@ class TodoState extends State<todoWidget>{
     String data = noteController.text;
 
     API.postItem(data).then((response){
-      Navigator.pop(context,{'test':"Hello"});
+
+      var item = json.decode(response.body);
+      // debugPrint(item.toString());
+
+      var value = json.encode({
+        'id' : item['post_id'],
+        'content' : data
+      });
+
+      // debugPrint(value.toString());
+
+      Navigator.pop(context,value);
     });
   }
 

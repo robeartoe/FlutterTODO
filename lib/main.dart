@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void postItem() {
-    Navigator.push(context, MaterialPageRoute<void>(
+    Navigator.push(context, MaterialPageRoute(
       builder: (BuildContext) {
           return new todoWidget();
       },
@@ -106,7 +106,17 @@ class _MyHomePageState extends State<MyHomePage> {
         //       begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0)).animate(
         //       animation), child: child,);
         // }
-    ));
+    )).then((item) => {
+      setState((){
+        // debugPrint("ITEM MAIN");
+        // debugPrint(item.toString());
+
+        Map value = json.decode(item);
+        // debugPrint(value.toString());
+        Item newItem = Item(value['id'],value['content']);
+        items.insert(0,newItem);
+      })
+    });
   }
 
 
@@ -136,32 +146,12 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Stack(children: <Widget>[
           _buildTodolist(),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: FloatingActionButton(
-            heroTag: 'Add',
-            onPressed: postItem,
-            tooltip: 'Add task',
-            child: new Icon(Icons.add), 
-          )),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: FloatingActionButton(
-              heroTag: 'Refresh',
-              onPressed: _getItems,
-              tooltip: 'Refresh Task',
-              child: new Icon(Icons.refresh)
-            )
-
-          ),
       ]),
-
-        //   floatingActionButton: new FloatingActionButton(
-        //   onPressed: postItem,
-        //   tooltip: 'Add task',
-        //   child: new Icon(Icons.add)
-        // ),
-
+        floatingActionButton: new FloatingActionButton(
+        onPressed: postItem,
+        tooltip: 'Add task',
+        child: new Icon(Icons.add)
+      ),
     );
   }
 }
