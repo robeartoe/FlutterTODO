@@ -18,7 +18,10 @@ class TodoState extends State<todoWidget>{
 
   _postItem(){
     String data = noteController.text;
-
+    if(data.isEmpty){
+      _emptyItem();
+      return;
+    }
     API.postItem(data).then((response){
 
       var item = json.decode(response.body);
@@ -34,7 +37,22 @@ class TodoState extends State<todoWidget>{
       Navigator.pop(context,value);
     });
   }
-
+  void _emptyItem(){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return new AlertDialog(
+              title: new Text('Field can not be empty'),
+              actions: <Widget>[
+                new FlatButton(
+                    child: new Text('OKAY'),
+                    onPressed: () => Navigator.of(context).pop()
+                )
+              ]
+          );
+        }
+    );
+  }
   @override
   Widget build(BuildContext context){
     final Size screenSize = MediaQuery.of(context).size;
